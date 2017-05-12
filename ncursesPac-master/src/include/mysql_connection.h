@@ -12,7 +12,7 @@
 #ifndef _MYSQL_CONNECTION_H_
 #define _MYSQL_CONNECTION_H_
 
-#include <cppconn/connection.h>
+#include "cppconn/connection.h"
 struct st_mysql;
 
 
