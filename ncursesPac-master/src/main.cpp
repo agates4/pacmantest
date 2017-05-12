@@ -7,12 +7,12 @@
 #include <iostream>
 #include <string>
 #include <sstream>
-#include "include/mysql_connection.h"
-#include "include/cppconn/driver.h"
-#include "include/cppconn/exception.h"
-#include "include/cppconn/resultset.h"
-#include "include/cppconn/statement.h"
-#include "include/cppconn/prepared_statement.h"
+#include "mysql_connection.h"
+#include <cppconn/driver.h>
+#include <cppconn/exception.h>
+#include <cppconn/resultset.h>
+#include <cppconn/statement.h>
+#include <cppconn/prepared_statement.h>
 
 using namespace std;
 
