@@ -27,7 +27,7 @@ CDEBUG      = -O0
 CXXFLAGS    = $(CDEBUG) -c -g -Wno-reorder -std=c++11 -Wall -pedantic -Wno-long-long -O0 -ggdb $(CFLAGS_PLATFORM) # -Wall -Wextra
 LDFLAGS     = -lmenu -lncurses $(LDFLAGS_PLATFORM)
 INCLUDESDIR = -I"src/" -I/usr/include/cppconn
-LIBSDIR     = -L/usr/lib -l sqlite3
+LIBSDIR     = -L/usr/lib -lmysqlcppconn
 
 # Project source files
 CXXFILES = $(shell find src -type f -name '*.cpp')
