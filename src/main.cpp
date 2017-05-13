@@ -22,7 +22,7 @@ int main(int argc, char const *argv[])
     sqlite3 *db;
     sqlite3_stmt * stmt;
     /* Open database */
-    if( sqlite3_open("/database.db", &db) ){
+    if( sqlite3_open("database.db", &db) ){
         fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
         return(0);
     }else{
