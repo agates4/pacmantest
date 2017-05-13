@@ -10,6 +10,20 @@
 #include <Engine/CMenuItemOption.h>
 #include <cstdlib>
 
+// the database stuff
+#include <stdio.h>
+#include <stdlib.h>
+#include <sqlite3.h>
+#include <iostream>
+#include <ctime>
+#include <ratio>
+#include <chrono>
+#include <algorithm>
+#include <fstream>
+#include <cstring>
+#include <string>
+
+using namespace std;
 
 template<typename T> void safe_delete(T*& a) 
 	{
@@ -132,12 +146,8 @@ void CStateMenu::update ()
 								CStateManager::quit ();
 								break;
                                     
-                                case LOGIN:
-                                DrawLogin ();
-                                break;
-                                    
-                                case REGISTER:
-                                DrawRegister ();
+                                case SCORES:
+                                DrawScores ();
                                 break;
 							}
 						menu -> reset ();
@@ -167,13 +177,8 @@ void CStateMenu::CreateMainMenu()
 		CMenuItem * item_ptr;
         
         
-        item_ptr = new CMenuItem ( "Login", LOGIN);
+        item_ptr = new CMenuItem ( "Top Scores", SCORES);
         menu -> add ( item_ptr );
-        
-        
-        item_ptr = new CMenuItem ( "Register", REGISTER);
-        menu -> add ( item_ptr );
-        
         
         menu -> add ( NULL );
         
@@ -210,21 +215,46 @@ void CStateMenu::DrawAboutMenu ()
 		CDialog::show ( *v, "About Game" ); 
 		delete v;
 	}
-void CStateMenu::DrawLogin ()
+void CStateMenu::DrawScores ()
     {
-        std::vector<std::string> * v = new  std::vector<std::string> {   "Enter your username and password to login." };
+        std::vector<std::string> * v = new  std::vector<std::string> {   "Top 10 Scores" };
+        std::vector<std::string> * scores = new  std::vector<std::string> { };
         
-        std::vector<std::string> * questions = new  std::vector<std::string> {   "Username: " , "Password: "};
-        
-        CDialog::show_questions ( *v, "Login" , *questions);
-        delete v;
-        delete questions;
-    }
-void CStateMenu::DrawRegister ()
-    {
-        std::vector<std::string> * v = new  std::vector<std::string> {   "Enter a username and password to register." };
-        CDialog::show ( *v, "Register" );
-        delete v;
+        sqlite3 *db;
+        sqlite3_stmt * stmt;
+        /* Open database */
+        if( sqlite3_open("database.sqlite", &db) ){
+            fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
+            return;
+        }else{
+            string query = "SELECT score FROM score ORDER BY score DESC LIMIT 10";
+            
+            if ( sqlite3_prepare(db, query.c_str(), -1, &stmt, 0 ) == SQLITE_OK )
+            {
+                int ctotal = sqlite3_column_count(stmt);
+                int res = 0;
+                
+                while ( 1 )
+                {
+                    res = sqlite3_step(stmt);
+                    
+                    if ( res == SQLITE_ROW )
+                    {
+                        for ( int i = 0; i < ctotal; i++ )
+                        {
+                            string s = (char*)sqlite3_column_text(stmt, i);
+                            scores->push_back(s);
+                        }
+                    }
+                    if ( res == SQLITE_DONE || res==SQLITE_ERROR)
+                        break;
+                }
+            }
+            CDialog::show_scores ( *v, "Huzzah" , *scores);
+            delete v;
+            delete scores;
+
+        }
     }
 void CStateMenu::CreateLevelsMenu ()
 	{

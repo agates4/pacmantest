@@ -72,6 +72,7 @@ int main(int argc, char const *argv[])
                     break;
             }
         }
+        sqlite3_finalize(stmt);
         if (validUser) {
             mvprintw(LINES - 2, 0, "Login successful: %s", "press any button to continue.");
         }
@@ -82,6 +83,50 @@ int main(int argc, char const *argv[])
             return 0;
         }
 
+    }
+    else if (str[0] == 'y' && str[1] == '\0'){
+        mvprintw(row/2 - 2,(col-strlen("Register"))/2,"%s","Register");
+        mvprintw(row/2,(col-strlen("Username: "))/2,"%s","Username: ");
+        getstr(str);
+        mvprintw(LINES - 2, 0, "You Entered: %s", str);
+        string username = str;
+        mvprintw(row/2 + 1,(col-strlen("Password: "))/2,"%s","Password: ");
+        getstr(str);
+        string password = str;
+        mvprintw(LINES - 2, 0, "You Entered: %s", str);
+        
+        string query2 = "INSERT INTO user (username, password, role_ID) VALUES ('" + username + "', '" + password + "', 2)";
+        bool validUser = false;
+        if (sqlite3_prepare(db, query2.c_str(), -1, &stmt, 0) == SQLITE_OK)
+        {
+            int res = sqlite3_step(stmt);
+            sqlite3_finalize(stmt);
+            if (res == 101) {
+                validUser = true;
+            }
+        }
+//        if ( sqlite3_prepare(db, query2.c_str(), -1, &stmt, 0 ) == SQLITE_OK )
+//        {
+//            int res = sqlite3_step(stmt);
+//            sqlite3_finalize(stmt);
+//            mvprintw(LINES - 2, 0, "The text: %s", to_string(res).c_str());
+////            query2 = "INSERT INTO user (ID, username, password, role_ID) VALUES ('5', '" + username + "', '" + password + "', '2');";
+////            if ( sqlite3_prepare(db, query2.c_str(), -1, &stmt, 0 ) == SQLITE_OK )
+////            {
+////                res = sqlite3_step(stmt);
+////                sqlite3_finalize(stmt);
+////                mvprintw(LINES - 2, 0, "The text: %s", to_string(res).c_str());
+////            }
+//        }
+        if (validUser) {
+            mvprintw(LINES - 2, 0, "Register successful: %s", "press any button to continue.");
+        }
+        else {
+            mvprintw(LINES - 2, 0, "Register failed: %s", "this program will terminate.");
+            getch();
+            endwin();
+            return 0;
+        }
     }
     else {
         mvprintw(row/2,(col-strlen("Bad input. This program will terminate. "))/2,"%s","Bad input. This program will terminate. ");

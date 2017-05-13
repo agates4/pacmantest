@@ -51,14 +51,14 @@ void CDialog::show ( const std::vector<std::string> & message,
 	}
 
 
-void CDialog::show_questions ( const std::vector<std::string> & message,
-                    const std::string & label , const std::vector<std::string> & input_questions)
+void CDialog::show_scores ( const std::vector<std::string> & message,
+                    const std::string & label , const std::vector<std::string> & input_scores)
     {
         int window_height, window_width, msg_width;
         
         msg_width = 0;
         
-        window_height = (message) . size () + 4 + input_questions . size ();
+        window_height = (message) . size () + 4 + input_scores . size ();
         
         for ( unsigned int i = 0; i < (message) . size (); ++i )
             msg_width = ((msg_width > (int) (message) [ i ] . size ()) ? msg_width : (int) (message) [ i ] . size ());
@@ -85,21 +85,15 @@ void CDialog::show_questions ( const std::vector<std::string> & message,
             dialog . print_str ( (message) [i], 2, i + 2);
         
         std::string key_input;
-        for ( unsigned int i = 0; i < (input_questions) . size (); ++i )
-            dialog . print_str ( (input_questions) [i], 2, i + 3);
+        for ( unsigned int i = 0; i < (input_scores) . size (); ++i )
+            dialog . print_str ( (input_scores) [i], 2, i + 3);
         
         dialog . refresh ();
         
         refresh ();
         CTime::delay_ms ( 5000 );
         
-        while(std::cin >> key_input && key_input.length() < 4){
-            for ( unsigned int i = 0; i < (message) . size (); ++i )
-                dialog . print_str ( (message) [i], 2, i + 2);
-            refresh ();
-        }
-        
-//        CNCurses::get_input (-1);
+        CNCurses::get_input (-1);
     }
 
 

@@ -19,8 +19,8 @@ namespace CDialog
 		void show ( const std::vector<std::string> & message,
                    const std::string & label);
         
-        void show_questions ( const std::vector<std::string> & message,
-                   const std::string & label, const std::vector<std::string> & input_questions);
+        void show_scores ( const std::vector<std::string> & message,
+                   const std::string & label, const std::vector<std::string> & input_scores);
 	}
 
 #endif //CDIALOG_H_DEFINED
