@@ -87,11 +87,11 @@ void CGame::start (  )
         auto t = std::time(nullptr);
         auto tm = *std::localtime(&t);
         std::ostringstream oss;
-        oss << put_time(&tm, "%d-%m-%Y");
+        oss << std::put_time(&tm, "%d-%m-%Y");
         auto str = oss.str();
         startDate = str;
         std::ostringstream osss;
-        osss << put_time(&tm, "%H-%M-%S");
+        osss << std::put_time(&tm, "%H-%M-%S");
         auto str2 = osss.str();
         startTime = str2;
         
@@ -298,11 +298,11 @@ void CGame::update ()
                         auto t = std::time(nullptr);
                         auto tm = *std::localtime(&t);
                         std::ostringstream oss;
-                        oss << put_time(&tm, "%d-%m-%Y");
+                        oss << std::put_time(&tm, "%d-%m-%Y");
                         auto str = oss.str();
                         string endDate = str;
                         std::ostringstream osss;
-                        osss << put_time(&tm, "%H-%M-%S");
+                        osss << std::put_time(&tm, "%H-%M-%S");
                         auto str2 = osss.str();
                         string endTime = str2;
                         
