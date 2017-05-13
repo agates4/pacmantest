@@ -93,11 +93,11 @@ void CGame::start (  )
         std::string str(buffer);
         startDate = str;
         
-        char buffer[80];
+        char buffer2[80];
         time (&rawtime);
         timeinfo = localtime(&rawtime);
-        strftime(buffer,sizeof(buffer),"%H-%M-%S",timeinfo);
-        std::string str2(buffer);
+        strftime(buffer,sizeof(buffer2),"%H-%M-%S",timeinfo);
+        std::string str2(buffer2);
         startTime = str2;
         
 		if ( high_score >= points)
@@ -308,11 +308,11 @@ void CGame::update ()
                         std::string str(buffer);
                         string endDate = str;
                         
-                        char buffer[80];
+                        char buffer2[80];
                         time (&rawtime);
                         timeinfo = localtime(&rawtime);
-                        strftime(buffer,sizeof(buffer),"%H-%M-%S",timeinfo);
-                        std::string str2(buffer);
+                        strftime(buffer,sizeof(buffer2),"%H-%M-%S",timeinfo);
+                        std::string str2(buffer2);
                         string endTime = str2;
                         
 						if ( lives > 0 )
