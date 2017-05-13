@@ -320,7 +320,7 @@ void CGame::update ()
                                 sqlite3 *db;
                                 sqlite3_stmt * stmt;
                                 /* Open database */
-                                if( sqlite3_open("database.db", &db) ){
+                                if( sqlite3_open("db.db", &db) ){
                                     fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
                                     return;
                                 }else{
@@ -344,7 +344,7 @@ void CGame::update ()
                                 sqlite3 *db;
                                 sqlite3_stmt * stmt;
                                 /* Open database */
-                                if( sqlite3_open("database.db", &db) ){
+                                if( sqlite3_open("db.db", &db) ){
                                     fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
                                     return;
                                 }else{
