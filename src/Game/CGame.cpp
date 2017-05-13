@@ -84,17 +84,21 @@ void CGame::start (  )
 		safe_delete ( ghost );
 		safe_delete ( pause_menu );
         
-        auto t = std::time(nullptr);
-        auto tm = *std::localtime(&t);
-        std::ostringstream oss;
-        oss << std::put_time(&tm, "%d-%m-%Y");
-        auto str = oss.str();
+        time_t rawtime;
+        struct tm * timeinfo;
+        char buffer[80];
+        time (&rawtime);
+        timeinfo = localtime(&rawtime);
+        strftime(buffer,sizeof(buffer),"%d-%m-%Y",timeinfo);
+        std::string str(buffer);
         startDate = str;
-        std::ostringstream osss;
-        osss << std::put_time(&tm, "%H-%M-%S");
-        auto str2 = osss.str();
-        startTime = str2;
         
+        char buffer[80];
+        time (&rawtime);
+        timeinfo = localtime(&rawtime);
+        strftime(buffer,sizeof(buffer),"%H-%M-%S",timeinfo);
+        std::string str(buffer);
+        startTime = str;
         
 		if ( high_score >= points)
 				save_high_score ();
@@ -295,16 +299,21 @@ void CGame::update ()
 			{
 				if ( ! player -> is_alive ())
 					{
-                        auto t = std::time(nullptr);
-                        auto tm = *std::localtime(&t);
-                        std::ostringstream oss;
-                        oss << std::put_time(&tm, "%d-%m-%Y");
-                        auto str = oss.str();
+                        time_t rawtime;
+                        struct tm * timeinfo;
+                        char buffer[80];
+                        time (&rawtime);
+                        timeinfo = localtime(&rawtime);
+                        strftime(buffer,sizeof(buffer),"%d-%m-%Y",timeinfo);
+                        std::string str(buffer);
                         string endDate = str;
-                        std::ostringstream osss;
-                        osss << std::put_time(&tm, "%H-%M-%S");
-                        auto str2 = osss.str();
-                        string endTime = str2;
+                        
+                        char buffer[80];
+                        time (&rawtime);
+                        timeinfo = localtime(&rawtime);
+                        strftime(buffer,sizeof(buffer),"%H-%M-%S",timeinfo);
+                        std::string str(buffer);
+                        string endTime = str;
                         
 						if ( lives > 0 )
 							{
