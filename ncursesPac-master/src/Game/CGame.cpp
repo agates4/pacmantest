@@ -9,13 +9,29 @@
 #include <sstream>
 #include <fstream>
 
+// the database stuff
+#include <stdio.h>
+#include <stdlib.h>
+#include <sqlite3.h>
+#include <iostream>
+#include <iomanip>
+#include <sstream>
+#include <ctime>
+#include <ratio>
+#include <chrono>
+#include <algorithm>
+#include <fstream>
+#include <cstring>
+#include <string>
+using namespace std;
 
 template<typename T> void safe_delete(T*& a) 
 	{
 	  delete a;
 	  a = NULL;
 	}
-
+string startTime = "";
+string startDate = "";
 
 CGame::CGame ():
 	game_over ( true ),
@@ -67,8 +83,19 @@ void CGame::start (  )
 		safe_delete ( layout );
 		safe_delete ( ghost );
 		safe_delete ( pause_menu );
-		
-
+        
+        auto t = std::time(nullptr);
+        auto tm = *std::localtime(&t);
+        std::ostringstream oss;
+        oss << std::put_time(&tm, "%d-%m-%Y");
+        auto str = oss.str();
+        startDate = str;
+        std::ostringstream osss;
+        osss << std::put_time(&tm, "%H-%M-%S");
+        auto str2 = osss.str();
+        startTime = str2;
+        
+        
 		if ( high_score >= points)
 				save_high_score ();
 
@@ -268,8 +295,33 @@ void CGame::update ()
 			{
 				if ( ! player -> is_alive ())
 					{
+                        auto t = std::time(nullptr);
+                        auto tm = *std::localtime(&t);
+                        std::ostringstream oss;
+                        oss << std::put_time(&tm, "%d-%m-%Y");
+                        auto str = oss.str();
+                        string endDate = str;
+                        std::ostringstream osss;
+                        osss << std::put_time(&tm, "%H-%M-%S");
+                        auto str2 = osss.str();
+                        string endTime = str2;
+                        
 						if ( lives > 0 )
 							{
+                                sqlite3 *db;
+                                sqlite3_stmt * stmt;
+                                /* Open database */
+                                if( sqlite3_open("database.db", &db) ){
+                                    fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
+                                    return;
+                                }else{
+                                    string query2 = "INSERT INTO life (s_level, s_difficulty, s_time, s_date, levels_passed, e_time, e_date) VALUES ('1', '" + to_string(difficulty) + "', '" + startTime + "', '" + startDate + "', '" + to_string(stage) + "', '" + endTime + "', '" + endDate + "')";
+                                    if (sqlite3_prepare(db, query2.c_str(), -1, &stmt, 0) == SQLITE_OK)
+                                    {
+                                        int res = sqlite3_step(stmt);
+                                        sqlite3_finalize(stmt);
+                                    }
+                                }
 								lives--;
 								std::vector<std::string> v = {  "You have " + 
 																std::to_string(lives) +
@@ -280,6 +332,53 @@ void CGame::update ()
 							}	
 						else 
 							{
+                                sqlite3 *db;
+                                sqlite3_stmt * stmt;
+                                /* Open database */
+                                if( sqlite3_open("database.db", &db) ){
+                                    fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
+                                    return;
+                                }else{
+                                    string query2 = "INSERT INTO life (s_level, s_difficulty, s_time, s_date, levels_passed, e_time, e_date) VALUES ('1', '" + to_string(difficulty) + "', '" + startTime + "', '" + startDate + "', '" + to_string(stage) + "', '" + endTime + "', '" + endDate + "')";
+                                    if (sqlite3_prepare(db, query2.c_str(), -1, &stmt, 0) == SQLITE_OK)
+                                    {
+                                        int res = sqlite3_step(stmt);
+                                        sqlite3_finalize(stmt);
+                                    }
+                                    string username;
+                                    ifstream myfile ("user.txt");
+                                    if (myfile.is_open())
+                                    {
+                                        while ( getline (myfile,username) )
+                                        {
+                                            cout << username;
+                                        }
+                                        myfile.close();
+                                    }
+                                    string query3 = "SELECT ID FROM user WHERE username = '" + username + "'";
+                                    string userID = "";
+                                    if ( sqlite3_prepare(db, query3.c_str(), -1, &stmt, NULL ) == SQLITE_OK )
+                                    {
+                                        int res = 0;
+                                        while ( 1 )
+                                        {
+                                            res = sqlite3_step(stmt);
+                                            if ( res == SQLITE_ROW ) {
+                                                string s = (char*)sqlite3_column_text(stmt, 0);
+                                                userID = s;
+                                            }
+                                            if ( res == SQLITE_DONE || res==SQLITE_ERROR)
+                                                break;
+                                        }
+                                    }
+                                    sqlite3_finalize(stmt);
+                                    string query4 = "INSERT INTO score (user_ID, score) VALUES ('" + userID + "', '" + to_string(points) + "')";
+                                    if (sqlite3_prepare(db, query4.c_str(), -1, &stmt, 0) == SQLITE_OK)
+                                    {
+                                        int res = sqlite3_step(stmt);
+                                        sqlite3_finalize(stmt);
+                                    }
+                                }
 								game_over = true;
 								std::vector<std::string> v = {  "Your score is: " +
 																 std::to_string(points) + "." };
