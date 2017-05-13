@@ -9,6 +9,20 @@
 #include <sstream>
 #include <fstream>
 
+// the database stuff
+#include <stdio.h>
+#include <stdlib.h>
+#include <sqlite3.h>
+#include <iostream>
+#include <ctime>
+#include <ratio>
+#include <chrono>
+#include <algorithm>
+#include <fstream>
+#include <cstring>
+#include <string>
+
+using namespace std;
 
 template<typename T> void safe_delete(T*& a) 
 	{
