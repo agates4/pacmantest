@@ -10,7 +10,7 @@
 # General Info
 PACKAGE = npac
 VERSION = 1
-PDATE    = $(shell date "+%b%Y")
+DATE    = $(shell date "+%b%Y")
 
 
 # Misc stuff
@@ -26,8 +26,8 @@ EXE         = $(PACKAGE)
 CDEBUG      = -O0
 CXXFLAGS    = $(CDEBUG) -c -g -Wno-reorder -std=c++11 -Wall -pedantic -Wno-long-long -O0 -ggdb $(CFLAGS_PLATFORM) # -Wall -Wextra
 LDFLAGS     = -lmenu -lncurses $(LDFLAGS_PLATFORM)
-INCLUDESDIR = -I"src/" -I/usr/include/cppconn
-LIBSDIR     = -L/usr/lib -l sqlite3
+INCLUDESDIR = -I"src/"
+LIBSDIR     =
 
 # Project source files
 CXXFILES = $(shell find src -type f -name '*.cpp')
@@ -36,7 +36,7 @@ OBJECTS  = $(CXXFILES:.cpp=.o)
 
 DEFINES = -DVERSION=\""$(VERSION)"\"                  \
           -DPACKAGE=\""$(PACKAGE)"\"                  \
-          -DPDATE=\""$(PDATE)"\"                        \
+          -DDATE=\""$(DATE)"\"                        \
           -DSYSTEM_LEVEL_DIR=\""$(LEVELDIR)"\"
 
 
@@ -50,7 +50,7 @@ MUTE = @
 endif
 
 # Make targets
-all:compile
+all:compile doc
 	# Build successful!
 
 compile: $(EXE) 

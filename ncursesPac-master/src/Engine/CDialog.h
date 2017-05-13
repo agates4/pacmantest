@@ -17,10 +17,7 @@ namespace CDialog
 		/// @param label Label on right-left side of dialog.
 
 		void show ( const std::vector<std::string> & message,
-                   const std::string & label);
-        
-        void show_scores ( const std::vector<std::string> & message,
-                   const std::string & label, const std::vector<std::string> & input_scores);
+					const std::string & label );
 	}
 
 #endif //CDIALOG_H_DEFINED

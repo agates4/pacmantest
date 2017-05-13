@@ -33,7 +33,6 @@ class CStateMenu : public CState
 		// other menus here ...
 		void CreateMainMenu ();
 		void DrawAboutMenu ();
-        void DrawScores ();
 		void CreateLevelsMenu ();
 		void CreateOptionsMenu ();
 	};

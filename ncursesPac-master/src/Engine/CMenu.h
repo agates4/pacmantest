@@ -19,7 +19,6 @@ enum MenuIDs
 		CREDITS,
 		EXIT_GAME,
 		END_GAME,
-        SCORES,
 		HIGH_SCORES,
 		BACK,
 

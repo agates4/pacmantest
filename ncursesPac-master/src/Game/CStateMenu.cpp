@@ -10,20 +10,6 @@
 #include <Engine/CMenuItemOption.h>
 #include <cstdlib>
 
-// the database stuff
-#include <stdio.h>
-#include <stdlib.h>
-#include <sqlite3.h>
-#include <iostream>
-#include <ctime>
-#include <ratio>
-#include <chrono>
-#include <algorithm>
-#include <fstream>
-#include <cstring>
-#include <string>
-
-using namespace std;
 
 template<typename T> void safe_delete(T*& a) 
 	{
@@ -129,11 +115,9 @@ void CStateMenu::update ()
 								case START_GAME:
 								CStateManager::change ( new CStateGame ( "default", difficulty ) );
 								break;
-                                    
 								case CHOOSE_LEVEL:
 								menu_levels = true;
 								break;
-                                    
 								case OPTIONS:
 								menu_options = true;
 								break;
@@ -145,10 +129,6 @@ void CStateMenu::update ()
 								case EXIT_GAME:
 								CStateManager::quit ();
 								break;
-                                    
-                                case SCORES:
-                                DrawScores ();
-                                break;
 							}
 						menu -> reset ();
 					}
@@ -173,16 +153,8 @@ void CStateMenu::CreateMainMenu()
 		safe_delete ( menu );
 
 		menu = new CMenu ( 1, 1, layout -> menu -> get_width () - 2, layout -> menu -> get_height () - 2);
-        
+
 		CMenuItem * item_ptr;
-        
-        
-        item_ptr = new CMenuItem ( "Top Scores", SCORES);
-        menu -> add ( item_ptr );
-        
-        menu -> add ( NULL );
-        
-        
 		item_ptr = new CMenuItem ( "Arcade Mode", START_GAME);
 		menu -> add ( item_ptr );
 
@@ -203,7 +175,7 @@ void CStateMenu::CreateMainMenu()
 
 		item_ptr = new CMenuItem ( "Exit Game", EXIT_GAME);
 		menu -> add ( item_ptr );
-        
+
 
 	}
 void CStateMenu::DrawAboutMenu ()
@@ -215,47 +187,6 @@ void CStateMenu::DrawAboutMenu ()
 		CDialog::show ( *v, "About Game" ); 
 		delete v;
 	}
-void CStateMenu::DrawScores ()
-    {
-        std::vector<std::string> * v = new  std::vector<std::string> {   "Top 10 Scores" };
-        std::vector<std::string> * scores = new  std::vector<std::string> { };
-        
-        sqlite3 *db;
-        sqlite3_stmt * stmt;
-        /* Open database */
-        if( sqlite3_open("database.sqlite", &db) ){
-            fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
-            return;
-        }else{
-            string query = "SELECT score FROM score ORDER BY score DESC LIMIT 10";
-            
-            if ( sqlite3_prepare(db, query.c_str(), -1, &stmt, 0 ) == SQLITE_OK )
-            {
-                int ctotal = sqlite3_column_count(stmt);
-                int res = 0;
-                
-                while ( 1 )
-                {
-                    res = sqlite3_step(stmt);
-                    
-                    if ( res == SQLITE_ROW )
-                    {
-                        for ( int i = 0; i < ctotal; i++ )
-                        {
-                            string s = (char*)sqlite3_column_text(stmt, i);
-                            scores->push_back(s);
-                        }
-                    }
-                    if ( res == SQLITE_DONE || res==SQLITE_ERROR)
-                        break;
-                }
-            }
-            CDialog::show_scores ( *v, "Huzzah" , *scores);
-            delete v;
-            delete scores;
-
-        }
-    }
 void CStateMenu::CreateLevelsMenu ()
 	{
 		safe_delete ( levels );
