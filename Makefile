@@ -24,6 +24,7 @@ LEVELDIR   = $(DATAROOTDIR)/games/nsnake/levels
 # Build info
 EXE         = $(PACKAGE)
 CDEBUG      = -O0
+CXX         = clang++
 CXXFLAGS    = $(CDEBUG) -c -g -Wno-reorder -std=c++11 -Wall -pedantic -Wno-long-long -O0 -ggdb $(CFLAGS_PLATFORM) # -Wall -Wextra
 LDFLAGS     = -lmenu -lncurses $(LDFLAGS_PLATFORM)
 INCLUDESDIR = -I"src/" -I/usr/include/cppconn
